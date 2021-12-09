@@ -12,9 +12,9 @@
 #########  load packages and data
 ##########################################
  
-source(file="./Tools/V0_1 pre_process data.R")
+source(file="~/Documents/GitHub/ActuarialDataScience/2 - Insights from Inside Neural Networks/Tools/V0_1 pre_process data.R")
 # pro-processing uses dummy coding
-source(file="./Tools/V0_2 network architectures.R")
+source(file="~/Documents/GitHub/ActuarialDataScience/2 - Insights from Inside Neural Networks/Tools/V0_2 network architectures.R")
 str(learn)    
 
    
@@ -45,7 +45,7 @@ model <- shallow.plain.vanilla(seed, qqq, log(lambda.0))
 model
 
 # install callback
-path0 <- paste("./Parameters/shallow_plain_vanilla", sep="")
+path0 <- paste("/Documents/GitHub/ActuarialDataScience/2 - Insights from Inside Neural Networks/Parameters/shallow_plain_vanilla", sep="")
 CBs <- callback_model_checkpoint(path0, monitor = "val_loss", verbose = 0,  save_best_only = TRUE, save_weights_only = TRUE)
 
 # compile model

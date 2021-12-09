@@ -17,6 +17,7 @@ library(data.table)
 library(plyr)
 
 data(freMTPL2freq)
+
 dat <- freMTPL2freq
 dat$VehGas <- factor(dat$VehGas)
 dat$n <- 1
@@ -42,7 +43,9 @@ PreProcess.CatDummy <- function(var1, short, dat2){
    n2 <- ncol(dat2)
    dat2$X <- as.integer(dat2$V1)
    n0 <- length(unique(dat2$X))
-   for (n1 in 2:n0){dat2[, paste(short, n1, sep="")] <- as.integer(dat2$X==n1)}
+   for (n1 in 2:n0){
+      dat2[, paste(short, n1, sep="")] <- as.integer(dat2$X==n1)
+      }
    names(dat2)[names(dat2) == "V1"]  <- var1
    dat2[, c(1:n2,(n2+2):ncol(dat2))]
    }
@@ -122,16 +125,16 @@ Shallow.Neural.Net <- function(S1, q1, rho, a, beta1, W1){
 #########  initialize weights for start
 ##########################################
 
-#starting.weights <- function(q1, MLE_hom, seed){
-#   beta1 <- array(log(MLE_hom), c(q1+1,1))    
-#   beta1[-1,1] <- rnorm(q1, mean=0, sd=1/sqrt(10*d1))
-#   W1 <- array(0, c(q1,d1))
-#   set.seed(seed)
-#   for (d0 in 2:d1){W1[,d0] <- rnorm(q1, mean=1, sd=1/sqrt(10*d1)) }
-#   write.table(beta1, file=paste("./Parameters_NN/beta_neurons_",q1,"_V0.csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)
-#   write.table(W1, file=paste("./Parameters_NN/W1_neurons_",q1,"_V0.csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)    
-#  }
-#starting.weights(20, MLE_hom, 10000)
+starting.weights <- function(q1, MLE_hom, seed){
+  beta1 <- array(log(MLE_hom), c(q1+1,1))
+  beta1[-1,1] <- rnorm(q1, mean=0, sd=1/sqrt(10*d1))
+  W1 <- array(0, c(q1,d1))
+  set.seed(seed)
+  for (d0 in 2:d1){W1[,d0] <- rnorm(q1, mean=1, sd=1/sqrt(10*d1)) }
+  write.table(beta1, file=paste("/Parameters_NN/beta_neurons_",q1,"_V0.csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)
+  write.table(W1, file=paste("/Parameters_NN/W1_neurons_",q1,"_V0.csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)
+ }
+starting.weights(20, MLE_hom, 10000)
 
 
 NN.lambda.regression <- function(W1, beta1, n1, X){
@@ -164,8 +167,8 @@ Yt <- cbind(batch$Exposure, as.numeric(batch$ClaimNb))
 
 ### run 
 V0 <- 1
-beta.0 <- as.matrix(read.table(file=paste("./Parameters_NN/beta_neurons_",q1,"_V",V0,".csv", sep=""), header=FALSE, sep=";"))
-W1.0 <- as.matrix(read.table(file=paste("./Parameters_NN/W1_neurons_",q1,"_V",V0,".csv", sep=""), header=FALSE, sep=";"))
+beta.0 <- as.matrix(read.table(file=paste("/Parameters_NN/beta_neurons_",q1,"_V",V0,".csv", sep=""), header=FALSE, sep=";"))
+W1.0 <- as.matrix(read.table(file=paste("/Parameters_NN/W1_neurons_",q1,"_V",V0,".csv", sep=""), header=FALSE, sep=";"))
 
 learn$fit <- t(NN.lambda.regression (W1.0, beta.0, n_l, Xlearn))
 (Cali1.OOS <- 200*(sum(learn$fit*Ylearn[,1])-sum(Ylearn[,2])+sum(log((Ylearn[,2]/(learn$fit*Ylearn[,1]))^(Ylearn[,2]))))/n_l)       
@@ -182,8 +185,8 @@ beta1 <- param[[1]]
 W1 <- param[[2]]
 
 V0 <- 2
-#write.table(beta1, file=paste("./Parameters_NN/beta_neurons_",q1,"_V",V0,".csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)
-#write.table(W1, file=paste("./Parameters_NN/W1_neurons_",q1,"_V",V0,".csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)    
+write.table(beta1, file=paste("/Parameters_NN/beta_neurons_",q1,"_V",V0,".csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)
+write.table(W1, file=paste("/Parameters_NN/W1_neurons_",q1,"_V",V0,".csv", sep=""), sep=";", row.names=FALSE, col.names=FALSE)    
 
 learn$fit <- t(NN.lambda.regression (W1, beta1, n_l, Xlearn))
 (Cali1.OOS <- 200*(sum(learn$fit*Ylearn[,1])-sum(Ylearn[,2])+sum(log((Ylearn[,2]/(learn$fit*Ylearn[,1]))^(Ylearn[,2]))))/n_l)       

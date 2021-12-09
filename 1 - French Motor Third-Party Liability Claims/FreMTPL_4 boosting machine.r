@@ -5,7 +5,7 @@
 #########  Version March 02, 2020
 ##########################################
 
-source("./Tools/FreMTPL_1b load data.R")
+source("~/Documents/GitHub/ActuarialDataScience/1 - French Motor Third-Party Liability Claims/Tools/FreMTPL_1b load data.R")
 
 learn <- learn.GLM
 test <- test.GLM

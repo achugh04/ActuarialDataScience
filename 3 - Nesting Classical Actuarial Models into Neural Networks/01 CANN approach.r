@@ -42,7 +42,7 @@ dat2$DrivAgeGLM <- as.factor(DrivAgeGLM[dat2$DrivAge-17,2])
 dat2[,"DrivAgeGLM"] <-relevel(dat2[,"DrivAgeGLM"], ref="5")
 dat2$BonusMalusGLM <- as.integer(pmin(dat2$BonusMalus, 150))
 dat2$DensityGLM <- as.numeric(log(dat2$Density))
-dat2[,"Region"] <-relevel(dat2[,"Region"], ref="R24")
+dat2[,"Region"] <-relevel(dat2[,"Region"], ref="Rhone-Alpes")
 str(dat2)
 
 ###############################################
@@ -206,3 +206,4 @@ test0$fitNN <- as.vector(model %>% predict(list(Xtest, Brtest, Retest, Vtest)))
 Poisson.Deviance(learn0$fitNN, as.vector(unlist(learn0$ClaimNb)))
 Poisson.Deviance(test0$fitNN, as.vector(unlist(test0$ClaimNb)))
 sum(test0$fitNN)/sum(test0$Exposure)
+

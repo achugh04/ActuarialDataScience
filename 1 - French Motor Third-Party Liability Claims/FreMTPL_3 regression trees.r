@@ -5,7 +5,7 @@
 #########  Version March 02, 2020
 ##########################################
 
-source("./Tools/FreMTPL_1b load data.R")
+source("~/Documents/GitHub/ActuarialDataScience/1 - French Motor Third-Party Liability Claims/Tools/FreMTPL_1b load data.R")
 
 str(learn.GLM)
 
@@ -14,6 +14,8 @@ str(learn.GLM)
 ##########################################
 
 ### Model RT1
+library(rpart)
+library(rpart.plot)
 {t1 <- proc.time()
 tree1 <- rpart(cbind(Exposure,ClaimNb) ~ Area + VehPower + VehAge + DrivAge + BonusMalus + VehBrand + VehGas + Density + Region, 
             learn.GLM, method="poisson",
